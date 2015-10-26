@@ -1,0 +1,12 @@
+<template name="nav">
+  <div class="ui fixed transparent inverted main menu">
+    <div class="header item">
+        <i class="big orange trophy icon"></i>
+    </div>
+    <a class="{{isActiveRoute regex='home'}} item" href="{{pathFor 'home'}}">Home</a>
+    <a class="{{isActiveRoute regex='private'}} item" href="{{pathFor 'private'}}">Private</a>
+    <div class="right menu">
+      {{> atNavButton}}
+    </div>
+  </div>
+</template>

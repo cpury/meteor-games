@@ -1,0 +1,32 @@
+<template name="home">
+  <div class="ui fluid center aligned basic fitted game segment">
+    <h1>Welcome to PlayR!</h1>
+    <p>
+      Try out our simple multi player games or play against an AI!
+    </p>
+    <div class="ui divider"></div>
+    {{> gameOverview}}
+  </div>
+</template>
+
+<template name="gameOverview">
+  <div class="ui cards">
+    <div class="ui card" id="tttCard">
+      <div class="content">
+        <div class="ui large header" style="margin-bottom: -6px">
+          <i class="game icon"></i>
+          Tick Tack Toe
+        </div>
+      </div>
+      <div class="content">
+        Try to get three fields in a row to win.
+      </div>
+      <div class="extra content">
+        <button class="ui blue fluid right labeled icon new game button">
+          <i class="right arrow icon"></i>
+          New Game
+        </button>
+      </div>
+    </div>
+  </div>
+</template>

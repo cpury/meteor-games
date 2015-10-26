@@ -1,0 +1,32 @@
+<template name="tickTackToe">
+  <div class="ui fluid center aligned basic fitted game segment">
+    <h1>Tick Tack Toe!</h1>
+    <p>
+      Yay!
+    </p>
+    <div class="ui divider"></div>
+    {{> tttBoard}}
+  </div>
+</template>
+
+<template name="tttBoard">
+  <div class="ttt container">
+    <table class="ui selectable unstackable celled fixed three column compact table">
+      <tr class="center aligned" id="r0">
+        <td id="c0">{{ grid 0 0 }}</td>
+        <td id="c1">{{ grid 0 1 }}</td>
+        <td id="c2">{{ grid 0 2 }}</td>
+      </tr>
+      <tr class="center aligned" id="r1">
+        <td id="c0">{{ grid 1 0 }}</td>
+        <td id="c1">{{ grid 1 1 }}</td>
+        <td id="c2">{{ grid 1 2 }}</td>
+      </tr>
+      <tr class="center aligned" id="r2">
+        <td id="c0">{{ grid 2 0 }}</td>
+        <td id="c1">{{ grid 2 1 }}</td>
+        <td id="c2">{{ grid 2 2 }}</td>
+      </tr>
+    </table>
+  </div>
+</template>
