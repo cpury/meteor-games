@@ -1,4 +1,4 @@
-# PlayR
+# playgames.meteor.com
 
 Simple multiplayer games in Meteor!
 
