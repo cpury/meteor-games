@@ -47,16 +47,21 @@ Template.tickTackToe.helpers({
 
     playerN = gameInstance.players.indexOf(Meteor.userId());
 
-    if (gameInstance.status == 'playing') {
+    if (gameInstance.status == 'waitingForPlayers') {
+      return 'Waiting for players'
+
+    } else if (gameInstance.status == 'playing') {
       if (gameInstance.currentTurnPlayerN == playerN) {
         return 'Your Turn!'
       } else {
         return 'Player ' + parseInt(gameInstance.currentTurnPlayerN + 1) + '\'s Turn'
       }
+
     } else if(gameInstance.status == 'finished') {
       if (gameInstance.winner == null) {
         return 'It\'s a tie!';
       }
+
       if (gameInstance.winner == playerN) {
         return 'You Won!'
       } else {
@@ -99,7 +104,14 @@ Template.tickTackToe.events({
     var row = parseInt(cell.parent().attr('id')[1]);
     var col = parseInt(cell.attr('id')[1]);
 
-    if (cell.html()) {
+    var currentGameInstanceId = FlowRouter.getParam("instanceId")
+    var currentGameInstance = GameInstances.findOne(currentGameInstanceId)
+
+    if (currentGameInstance.status != 'playing') {
+      return;
+    }
+
+    if (currentGameInstance.state.grid[row][col] != null) {
       return;
     }
 
