@@ -1,5 +1,5 @@
 # PlayR
 
-Simple multiplaer games in Meteor!
+Simple multiplayer games in Meteor!
 
 Stay tuned...
