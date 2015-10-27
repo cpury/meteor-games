@@ -20,9 +20,15 @@ Template.tickTackToe.onCreated(function () {
             console.log("Error while joining game:", err);
             return;
           }
+          if (currentGameInstance.nPlayers + 1 < currentGameInstance.minPlayers) {
+            showInviteMessage();
+          }
         });
       } else {
         hideLoadingModal();
+        if (currentGameInstance.nPlayers < currentGameInstance.minPlayers) {
+          showInviteMessage();
+        }
       }
     });
   });
@@ -123,5 +129,5 @@ Template.tickTackToe.events({
         }
       }
     });
-  }
+  },
 });
