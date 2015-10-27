@@ -33,6 +33,29 @@ Template.tickTackToe.helpers({
     return GameInstances.findOne(FlowRouter.getParam("instanceId"));
   },
 
+  gameStatusString: function () {
+    gameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
+    if (!gameInstance) {
+      return '';
+    }
+
+    playerN = gameInstance.players.indexOf(Meteor.userId());
+
+    if (gameInstance.status == 'playing') {
+      if (gameInstance.currentTurnPlayerN == playerN) {
+        return 'Your Turn!'
+      } else {
+        return 'Player ' + parseInt(gameInstance.currentTurnPlayerN + 1) + '\'s Turn'
+      }
+    } else if(gameInstance.status == 'finished') {
+      if (gameInstance.winner == playerN) {
+        return 'You Won!'
+      } else {
+        return 'Player ' + parseInt(gameInstance.winner + 1) + ' Won!'
+      }
+    }
+  },
+
   isMyTurn: function () {
     if (!FlowRouter.subsReady()) {
       return false;
