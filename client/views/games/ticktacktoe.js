@@ -48,6 +48,9 @@ Template.tickTackToe.helpers({
         return 'Player ' + parseInt(gameInstance.currentTurnPlayerN + 1) + '\'s Turn'
       }
     } else if(gameInstance.status == 'finished') {
+      if (gameInstance.winner == null) {
+        return 'It\'s a tie!';
+      }
       if (gameInstance.winner == playerN) {
         return 'You Won!'
       } else {
@@ -90,6 +93,10 @@ Template.tickTackToe.events({
     var row = parseInt(cell.parent().attr('id')[1]);
     var col = parseInt(cell.attr('id')[1]);
 
+    if (cell.html()) {
+      return;
+    }
+
     var move = {
       row: row,
       col: col,
@@ -101,7 +108,20 @@ Template.tickTackToe.events({
         return;
       }
 
-      console.log("Move successful:", data);
+      // Check if it's AI's turn
+      if (!data) {
+        var currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
+        if (currentGameInstance.players.indexOf('ai') != -1) {
+          setTimeout(
+            Meteor.call("doMove", FlowRouter.getParam("instanceId"), "ai", function (err, data) {
+              if (err) {
+                console.log("Error doing AI move:", err);
+                return;
+              }
+            }),
+            1000);
+        }
+      }
     });
   }
 });
