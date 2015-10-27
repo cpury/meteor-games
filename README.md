@@ -1,5 +1,5 @@
-# playgames.meteor.com
+# Meteor Games
 
-Simple multiplayer games in Meteor!
+Simple multiplayer games written in Meteor! :)
 
-Stay tuned...
+Check it out on [playgames.meteor.com](http://playgames.meteor.com).
