@@ -30,6 +30,14 @@ Template.tickTackToe.onCreated(function () {
           showInviteMessage();
         }
       }
+
+      GameInstances.find(currentGameInstanceId).observeChanges({
+        changed: function (id, fields) {
+          if (fields.status != null || fields.currentTurnPlayerN != null) {
+            $('#statusString').transition('jiggle');
+          }
+        }
+      });
     });
   });
 });
@@ -98,6 +106,15 @@ Template.tttBoard.helpers({
   },
 });
 
+var runAI = function() {
+  Meteor.call("doMove", FlowRouter.getParam("instanceId"), "ai", function (err, data) {
+    if (err) {
+      console.log("Error doing AI move:", err);
+      return;
+    }
+  });
+}
+
 Template.tickTackToe.events({
   "click .ttt.container td": function (event) {
     var cell = $(event.target);
@@ -131,12 +148,7 @@ Template.tickTackToe.events({
         var currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
         if (currentGameInstance.players.indexOf('ai') != -1) {
           setTimeout(
-            Meteor.call("doMove", FlowRouter.getParam("instanceId"), "ai", function (err, data) {
-              if (err) {
-                console.log("Error doing AI move:", err);
-                return;
-              }
-            }),
+            runAI,
             1000);
         }
       }
