@@ -1,0 +1,23 @@
+<template name="connectFour">
+  <div class="ui fluid center aligned basic fitted game segment">
+    {{> inviteMessage}}
+    <h1>Connect Four!</h1>
+    <h2 id="statusString">{{ gameStatusString }}</h2>
+    <div class="ui divider"></div>
+    {{> cfBoard}}
+  </div>
+</template>
+
+<template name="cfBoard">
+  <div class="cf container">
+    <table class="ui selectable unstackable celled fixed three column compact table">
+      {{#each row in rows}}
+      <tr class="center aligned" id="r{{row}}">
+        {{#each column in columns}}
+        <td id="c{{column}}">{{ grid row column }}</td>
+        {{/each}}
+      </tr>
+      {{/each}}
+    </table>
+  </div>
+</template>

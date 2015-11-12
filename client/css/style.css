@@ -46,6 +46,23 @@ body {
   background-color: lightgray;
 }
 
+.cf.container {
+  width: 315px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cf.container td {
+  width: 45;
+  height: 45px;
+  font-size: 2em;
+  padding: 0 !important;
+}
+
+.cf.container td:hover {
+  background-color: lightgray;
+}
+
 @media (max-width: 767px) {
   .game.segment {
     padding: 0;
