@@ -90,11 +90,17 @@ Template.connectFour.helpers({
 
 Template.cfBoard.helpers({
   rows: function() {
-    return [0, 1, 2, 3, 4, 5];
-  },
+    if (!FlowRouter.subsReady()) {
+      return '';
+    }
 
-  columns: function() {
-    return [0, 1, 2, 3, 4, 5, 6];
+    var currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
+
+    if (!currentGameInstance) {
+      return '';
+    }
+
+    return currentGameInstance.state.grid;
   },
 
   grid: function (row, col) {
@@ -110,6 +116,12 @@ Template.cfBoard.helpers({
 
     var grid = currentGameInstance.state.grid;
     var val = grid[row][col]
+    return playerChars[val];
+  },
+});
+
+Template.cfColumn.helpers({
+  cell: function(val) {
     return playerChars[val];
   },
 });

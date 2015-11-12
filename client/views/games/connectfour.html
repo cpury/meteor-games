@@ -12,12 +12,20 @@
   <div class="cf container">
     <table class="ui selectable unstackable celled fixed three column compact table">
       {{#each row in rows}}
-      <tr class="center aligned" id="r{{row}}">
-        {{#each column in columns}}
-        <td id="c{{column}}">{{ grid row column }}</td>
-        {{/each}}
-      </tr>
+        {{> cfRow row=row rowIndex=@index}}
       {{/each}}
     </table>
   </div>
+</template>
+
+<template name="cfRow">
+  <tr class="center aligned" id="r{{rowIndex}}">
+    {{#each column in row}}
+      {{> cfColumn col=column rowIndex=rowIndex colIndex=@index}}
+    {{/each}}
+  </tr>
+</template>
+
+<template name="cfColumn">
+  <td id="c{{colIndex}}">{{ cell col }}</td>
 </template>
