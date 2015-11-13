@@ -3,12 +3,16 @@
     "gameId": "cf",
     "name": "Connect Four",
     "description": "Drop coins into slots to create chains of four.",
-    "nPlayers": "2"
+    "nPlayers": "2",
+    "nGamesStarted": 0,
+    "nGamesFinished": 0
   },
   {
     "gameId": "ttt",
     "name": "Tick Tack Toe",
     "description": "Try to get three signs in a row in this classic two-player game",
-    "nPlayers": "2"
+    "nPlayers": "2",
+    "nGamesStarted": 0,
+    "nGamesFinished": 0
   }
 ]
