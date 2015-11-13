@@ -1,15 +1,20 @@
 Meteor.startup(function () {
-  // Ideas._ensureIndex({"authorId": 1});
-  // Ideas._ensureIndex({"upvotes": 1});
-  // Ideas._ensureIndex({"comments.authorId": 1});
-  // Ideas._ensureIndex({"comments.upvotes": 1});
-  // Ideas._ensureIndex({"title": 1, "projectId": 1}, {unique: true});
+  GameInstances._ensureIndex({"gameId": 1});
+  Games._ensureIndex({"gameId": 1});
 
-  // Projects._ensureIndex({"authorId": 1});
-  // Projects._ensureIndex({"active": 1});
-  // Projects._ensureIndex({"private": 1});
-  // Projects._ensureIndex({"title": 1}, {unique: true});
+  // Load fixtures:
+  if (Games.find({}).count() === 0) {
+    console.log("Empty games :(");
+    var games = JSON.parse(Assets.getText('games_fixtures.json'));
+    _.each(games, function(game) {
+      Games.insert(game);
+    });
+  }
 });
+
+Meteor.publish("games", function() {
+  return Games.find({});
+})
 
 Meteor.publish("gameInstances", function () {
   return GameInstances.find({});

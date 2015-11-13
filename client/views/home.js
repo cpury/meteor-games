@@ -1,4 +1,17 @@
 Template.home.onCreated(function () {
+  var self = this;
+  self.autorun(function () {
+    showLoadingModal();
+    self.subscribe("games", function () {
+      hideLoadingModal();
+    });
+  });
+});
+
+Template.gameOverview.helpers({
+  "games": function () {
+    return Games.find({});
+  }
 });
 
 Template.home.events({

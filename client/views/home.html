@@ -11,40 +11,28 @@
 
 <template name="gameOverview">
   <div class="ui game cards">
-    <div class="ui game card" id="tttCard">
-      <div class="content">
-        <div class="ui large header" style="margin-bottom: -6px">
-          <i class="game icon"></i>
-          Tick Tack Toe
-        </div>
-      </div>
-      <div class="content">
-        Try to get three fields in a row to win.
-      </div>
-      <div class="extra content">
-        <button class="ui blue fluid right labeled icon new game button">
-          <i class="right arrow icon"></i>
-          New Game
-        </button>
+    {{#each games}}
+      {{> gameCard}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="gameCard">
+  <div class="ui game card" id="{{ gameId }}Card">
+    <div class="content">
+      <div class="ui large header" style="margin-bottom: -6px">
+        <i class="game icon"></i>
+        {{ name }}
       </div>
     </div>
-
-    <div class="ui game card" id="cfCard">
-      <div class="content">
-        <div class="ui large header" style="margin-bottom: -6px">
-          <i class="game icon"></i>
-          Connect Four
-        </div>
-      </div>
-      <div class="content">
-        Get four discs in a row to win.
-      </div>
-      <div class="extra content">
-        <button class="ui blue fluid right labeled icon new game button">
-          <i class="right arrow icon"></i>
-          New Game
-        </button>
-      </div>
+    <div class="content">
+      {{ description }}
+    </div>
+    <div class="extra content">
+      <button class="ui blue fluid right labeled icon new game button">
+        <i class="right arrow icon"></i>
+        New Game
+      </button>
     </div>
   </div>
 </template>
