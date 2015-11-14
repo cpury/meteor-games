@@ -2,6 +2,7 @@ var playerChars = ['X', 'O'];
 
 Template.tickTackToe.onCreated(function () {
   var self = this;
+
   self.autorun(function () {
     showLoadingModal();
 
@@ -20,6 +21,7 @@ Template.tickTackToe.onCreated(function () {
           if (data == false) {
             return;
           }
+          Session.set('gameReady', true);
           hideLoadingModal();
           if (err) {
             console.log("Error while joining game:", err);
@@ -49,6 +51,12 @@ Template.tickTackToe.onCreated(function () {
       });
     });
   });
+});
+
+Template.tickTackToe.onRendered(function () {
+  if (!Session.get('gameReady')) {
+    $('#gameOverviewSegment').addClass('loading');
+  }
 });
 
 Template.tickTackToe.helpers({

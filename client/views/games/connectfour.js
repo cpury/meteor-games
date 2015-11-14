@@ -2,6 +2,7 @@ var playerChars = ['X', 'O'];
 
 Template.connectFour.onCreated(function () {
   var self = this;
+
   self.autorun(function () {
     showLoadingModal();
 
@@ -20,6 +21,7 @@ Template.connectFour.onCreated(function () {
           if (data == false) {
             return;
           }
+          Session.set('gameReady', true);
           hideLoadingModal();
           if (err) {
             console.log("Error while joining game:", err);
@@ -49,6 +51,12 @@ Template.connectFour.onCreated(function () {
       });
     });
   });
+});
+
+Template.connectFour.onRendered(function () {
+  if (!Session.get('gameReady')) {
+    $('#gameOverviewSegment').addClass('loading');
+  }
 });
 
 Template.connectFour.helpers({
