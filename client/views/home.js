@@ -1,11 +1,16 @@
-Template.home.onCreated(function () {
+Template.gameOverview.onCreated(function () {
   var self = this;
   self.autorun(function () {
-    showLoadingModal();
     self.subscribe("games", function () {
-      hideLoadingModal();
+      $('#gameOverviewSegment').removeClass('loading');
     });
   });
+});
+
+Template.gameOverview.onRendered(function () {
+  if (!FlowRouter.subsReady("games")) {
+    $('#gameOverviewSegment').addClass('loading');
+  }
 });
 
 Template.gameOverview.helpers({

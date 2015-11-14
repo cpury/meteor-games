@@ -1,19 +1,25 @@
 <template name="home">
-  <div class="ui fluid center aligned basic fitted game segment">
-    <h1>Welcome to Meteor Games!</h1>
-    <p>
-      Try out our simple multi player games or play against an AI.
-    </p>
-    <div class="ui divider"></div>
-    {{> gameOverview}}
+  <div class="ui container">
+    <div class="ui fluid center aligned basic fitted game segment">
+      <h1>Welcome to Meteor Games!</h1>
+      <p>
+        Try out our simple multi player games or play against an AI.
+      </p>
+
+      <div class="ui hidden divider"></div>
+
+      {{> gameOverview}}
+    </div>
   </div>
 </template>
 
 <template name="gameOverview">
-  <div class="ui centered four stackable doubling game cards">
-    {{#each games}}
-      {{> gameCard}}
-    {{/each}}
+  <div class="ui basic segment" id="gameOverviewSegment">
+    <div class="ui centered four stackable doubling game cards">
+      {{#each games}}
+        {{> gameCard}}
+      {{/each}}
+    </div>
   </div>
 </template>
 

@@ -29,6 +29,10 @@ body {
   padding-left: 15px;
 }
 
+#gameOverviewSegment {
+  min-height: 5em;
+}
+
 .game.container {
   width: 315px;
   margin-left: auto;
@@ -49,7 +53,6 @@ body {
   width: 105px;
   height: 105px;
 }
-
 
 .cf.container td {
   width: 45px;
