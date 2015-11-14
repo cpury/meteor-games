@@ -29,37 +29,31 @@ body {
   padding-left: 15px;
 }
 
-.ttt.container {
+.game.container {
   width: 315px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.game.container td {
+  color: white;
+  font-size: 2em;
+  padding: 0 !important;
+}
+
+.game.container td:hover {
+  background-color: lightgray;
 }
 
 .ttt.container td {
   width: 105px;
   height: 105px;
-  font-size: 2em;
 }
 
-.ttt.container td:hover {
-  background-color: lightgray;
-}
-
-.cf.container {
-  width: 315px;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 .cf.container td {
-  width: 45;
+  width: 45px;
   height: 45px;
-  font-size: 2em;
-  padding: 0 !important;
-}
-
-.cf.container td:hover {
-  background-color: lightgray;
 }
 
 @media (max-width: 767px) {

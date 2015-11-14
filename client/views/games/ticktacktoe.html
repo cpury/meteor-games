@@ -9,7 +9,7 @@
 </template>
 
 <template name="tttBoard">
-  <div class="ttt container">
+  <div class="ttt game container">
     <table class="ui selectable unstackable celled fixed three column compact table">
       {{#each row in rows}}
         {{> tttRow row=row rowIndex=@index}}
