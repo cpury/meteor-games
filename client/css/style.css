@@ -68,3 +68,11 @@ body {
     padding: 0;
   }
 }
+
+.playerCell0 {
+  background-color: #2185D0 !important;
+}
+
+.playerCell1 {
+  background-color: #DB2828 !important;
+}
