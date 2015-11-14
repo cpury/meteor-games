@@ -22,6 +22,10 @@ Template.home.events({
     showLoadingModal();
 
     Meteor.call("startGameInstance", "ttt", function (err, data) {
+      if (data == false) {
+        return;
+      }
+
       btn.removeClass('loading');
 
       if (err) {
@@ -42,6 +46,10 @@ Template.home.events({
     showLoadingModal();
 
     Meteor.call("startGameInstance", "cf", function (err, data) {
+      if (data == false) {
+        return;
+      }
+
       btn.removeClass('loading');
 
       if (err) {

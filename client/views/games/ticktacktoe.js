@@ -15,6 +15,9 @@ Template.tickTackToe.onCreated(function () {
 
       if (currentGameInstance.players.indexOf(Meteor.userId()) == -1) {
         Meteor.call("joinGameInstance", currentGameInstanceId, function (err, data) {
+          if (data == false) {
+            return;
+          }
           hideLoadingModal();
           if (err) {
             console.log("Error while joining game:", err);
