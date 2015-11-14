@@ -83,45 +83,34 @@ Template.connectFour.helpers({
       return false;
     }
 
-    var currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
-    // TODO: Find out if it's my turn
+    currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
+    playerN = gameInstance.players.indexOf(Meteor.userId());
+
+    return (currentGameInstance.currentTurnPlayerN === playerN);
   },
 });
 
 Template.cfBoard.helpers({
   rows: function() {
     if (!FlowRouter.subsReady()) {
-      return '';
+      return null;
     }
 
     var currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
 
     if (!currentGameInstance) {
-      return '';
+      return null;
     }
 
     return currentGameInstance.state.grid;
-  },
-
-  grid: function (row, col) {
-    if (!FlowRouter.subsReady()) {
-      return '';
-    }
-
-    var currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
-
-    if (!currentGameInstance) {
-      return '';
-    }
-
-    var grid = currentGameInstance.state.grid;
-    var val = grid[row][col]
-    return playerChars[val];
   },
 });
 
 Template.cfColumn.helpers({
   cell: function(val) {
+    if (val == -1) {
+      return '';
+    }
     return playerChars[val];
   },
 });
@@ -148,12 +137,11 @@ Template.connectFour.events({
       return;
     }
 
-    if (currentGameInstance.state.grid[row][col] != null) {
+    if (currentGameInstance.state.grid[row][col] != -1) {
       return;
     }
 
     var move = {
-      row: row,
       col: col,
     };
 

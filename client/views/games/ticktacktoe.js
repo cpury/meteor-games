@@ -83,25 +83,34 @@ Template.tickTackToe.helpers({
       return false;
     }
 
-    var currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
-    // TODO: Find out if it's my turn
+    currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
+    playerN = gameInstance.players.indexOf(Meteor.userId());
+
+    return (currentGameInstance.currentTurnPlayerN === playerN);
   },
 });
 
 Template.tttBoard.helpers({
-  grid: function (row, col) {
+  rows: function() {
     if (!FlowRouter.subsReady()) {
-      return '';
+      return null;
     }
 
     var currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
 
     if (!currentGameInstance) {
-      return '';
+      return null;
     }
 
-    var grid = currentGameInstance.state.grid;
-    var val = grid[row][col]
+    return currentGameInstance.state.grid;
+  },
+});
+
+Template.tttColumn.helpers({
+  cell: function(val) {
+    if (val == -1) {
+      return '';
+    }
     return playerChars[val];
   },
 });
@@ -128,7 +137,7 @@ Template.tickTackToe.events({
       return;
     }
 
-    if (currentGameInstance.state.grid[row][col] != null) {
+    if (currentGameInstance.state.grid[row][col] != -1) {
       return;
     }
 

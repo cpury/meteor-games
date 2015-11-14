@@ -11,21 +11,21 @@
 <template name="tttBoard">
   <div class="ttt container">
     <table class="ui selectable unstackable celled fixed three column compact table">
-      <tr class="center aligned" id="r0">
-        <td id="c0">{{ grid 0 0 }}</td>
-        <td id="c1">{{ grid 0 1 }}</td>
-        <td id="c2">{{ grid 0 2 }}</td>
-      </tr>
-      <tr class="center aligned" id="r1">
-        <td id="c0">{{ grid 1 0 }}</td>
-        <td id="c1">{{ grid 1 1 }}</td>
-        <td id="c2">{{ grid 1 2 }}</td>
-      </tr>
-      <tr class="center aligned" id="r2">
-        <td id="c0">{{ grid 2 0 }}</td>
-        <td id="c1">{{ grid 2 1 }}</td>
-        <td id="c2">{{ grid 2 2 }}</td>
-      </tr>
+      {{#each row in rows}}
+        {{> tttRow row=row rowIndex=@index}}
+      {{/each}}
     </table>
   </div>
+</template>
+
+<template name="tttRow">
+  <tr class="center aligned" id="r{{rowIndex}}">
+    {{#each column in row}}
+      {{> tttColumn col=column rowIndex=rowIndex colIndex=@index}}
+    {{/each}}
+  </tr>
+</template>
+
+<template name="tttColumn">
+  <td id="c{{colIndex}}">{{ cell col }}</td>
 </template>
