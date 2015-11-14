@@ -19,7 +19,7 @@
 </template>
 
 <template name="tttRow">
-  <tr class="center aligned" id="r{{rowIndex}}">
+  <tr class="center aligned" id="r{{ rowIndex }}">
     {{#each column in row}}
       {{> tttColumn col=column rowIndex=rowIndex colIndex=@index}}
     {{/each}}
@@ -27,5 +27,5 @@
 </template>
 
 <template name="tttColumn">
-  <td id="c{{colIndex}}" class="playerCell{{ col }}">{{ cell col }}</td>
+  <td id="c{{ colIndex }}" class="playerCell{{ cellPlayer rowIndex colIndex }}">{{ cell rowIndex colIndex }}</td>
 </template>

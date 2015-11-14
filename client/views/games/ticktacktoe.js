@@ -13,6 +13,8 @@ Template.tickTackToe.onCreated(function () {
         FlowRouter.go('/');
       }
 
+      Session.set('gameInstance', currentGameInstance);
+
       if (currentGameInstance.players.indexOf(Meteor.userId()) == -1) {
         Meteor.call("joinGameInstance", currentGameInstanceId, function (err, data) {
           if (data == false) {
@@ -36,6 +38,10 @@ Template.tickTackToe.onCreated(function () {
 
       GameInstances.find(currentGameInstanceId).observeChanges({
         changed: function (id, fields) {
+          var currentGameInstanceId = FlowRouter.getParam("instanceId");
+          var currentGameInstance = GameInstances.findOne(currentGameInstanceId);
+          Session.set('gameInstance', currentGameInstance);
+
           if (fields.status != null || fields.currentTurnPlayerN != null) {
             $('#statusString').transition('jiggle');
           }
@@ -47,11 +53,11 @@ Template.tickTackToe.onCreated(function () {
 
 Template.tickTackToe.helpers({
   currentGameInstance: function () {
-    return GameInstances.findOne(FlowRouter.getParam("instanceId"));
+    return Session.get('gameInstance');
   },
 
   gameStatusString: function () {
-    gameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
+    gameInstance = Session.get('gameInstance');
     if (!gameInstance) {
       return '';
     }
@@ -82,35 +88,44 @@ Template.tickTackToe.helpers({
   },
 
   isMyTurn: function () {
-    if (!FlowRouter.subsReady()) {
+    gameInstance = Session.get('gameInstance');
+    if (!gameInstance) {
       return false;
     }
 
-    currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
     playerN = gameInstance.players.indexOf(Meteor.userId());
 
-    return (currentGameInstance.currentTurnPlayerN === playerN);
+    return (gameInstance.currentTurnPlayerN === playerN);
   },
 });
 
 Template.tttBoard.helpers({
   rows: function() {
-    if (!FlowRouter.subsReady()) {
+    gameInstance = Session.get('gameInstance');
+    if (!gameInstance) {
       return null;
     }
 
-    var currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
-
-    if (!currentGameInstance) {
-      return null;
-    }
-
-    return currentGameInstance.state.grid;
+    return gameInstance.state.grid;
   },
 });
 
 Template.tttColumn.helpers({
-  cell: function(val) {
+  cellPlayer: function(row, col) {
+    gameInstance = Session.get('gameInstance');
+    if (!gameInstance) {
+      return '';
+    }
+    return gameInstance.state.grid[row][col];
+  },
+
+  cell: function(row, col) {
+    gameInstance = Session.get('gameInstance');
+    if (!gameInstance) {
+      return '';
+    }
+    val = gameInstance.state.grid[row][col];
+
     if (val == -1) {
       return '';
     }
@@ -133,10 +148,10 @@ Template.tickTackToe.events({
     var row = parseInt(cell.parent().attr('id')[1]);
     var col = parseInt(cell.attr('id')[1]);
 
-    var currentGameInstanceId = FlowRouter.getParam("instanceId")
-    var currentGameInstance = GameInstances.findOne(currentGameInstanceId)
+    var currentGameInstanceId = FlowRouter.getParam("instanceId");
+    var currentGameInstance = Session.get('gameInstance');
 
-    if (currentGameInstance.status != 'playing') {
+    if (!currentGameInstance || currentGameInstance.status != 'playing') {
       return;
     }
 
@@ -157,7 +172,7 @@ Template.tickTackToe.events({
 
       // Check if it's AI's turn
       if (!data) {
-        var currentGameInstance = GameInstances.findOne(FlowRouter.getParam("instanceId"));
+        var currentGameInstance = Session.get('gameInstance');
         if (currentGameInstance.players.indexOf('ai') != -1) {
           setTimeout(
             runAI,
