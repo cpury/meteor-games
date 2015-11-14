@@ -88,14 +88,14 @@ Template.connectFour.helpers({
   },
 
   isMyTurn: function () {
-    if (!FlowRouter.subsReady()) {
+    gameInstance = Session.get('gameInstance');
+    if (!gameInstance) {
       return false;
     }
 
-    currentGameInstance = Session.get('gameInstance');
     playerN = gameInstance.players.indexOf(Meteor.userId());
 
-    return (currentGameInstance.currentTurnPlayerN === playerN);
+    return (gameInstance.currentTurnPlayerN === playerN);
   },
 });
 
@@ -106,7 +106,7 @@ Template.cfBoard.helpers({
       return null;
     }
 
-    return currentGameInstance.state.grid;
+    return gameInstance.state.grid;
   },
 });
 
