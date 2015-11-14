@@ -10,7 +10,7 @@
 </template>
 
 <template name="gameOverview">
-  <div class="ui game cards">
+  <div class="ui centered four stackable doubling game cards">
     {{#each games}}
       {{> gameCard}}
     {{/each}}
@@ -36,11 +36,9 @@
         <i class="user icon"></i>{{ nPlayers }} Players
       </span>
     </div>
-    <div class="extra content">
-      <button class="ui blue fluid right labeled icon new game button">
-        <i class="right arrow icon"></i>
-        New Game
-      </button>
+    <div class="ui bottom attached blue right labeled icon new game button">
+      <i class="right arrow icon"></i>
+      New Game
     </div>
   </div>
 </template>
