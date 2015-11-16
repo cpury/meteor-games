@@ -27,7 +27,7 @@ Template.home.events({
     showLoadingModal();
 
     Meteor.call("startGameInstance", "ttt", function (err, data) {
-      if (data == false) {
+      if (data === false) {
         return;
       }
 
@@ -51,7 +51,7 @@ Template.home.events({
     showLoadingModal();
 
     Meteor.call("startGameInstance", "cf", function (err, data) {
-      if (data == false) {
+      if (data === false) {
         return;
       }
 

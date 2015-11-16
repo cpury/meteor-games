@@ -16,9 +16,9 @@ Template.connectFour.onCreated(function () {
 
       Session.set('gameInstance', currentGameInstance);
 
-      if (currentGameInstance.players.indexOf(Meteor.userId()) == -1) {
+      if (currentGameInstance.players.indexOf(Meteor.userId()) === -1) {
         Meteor.call("joinGameInstance", currentGameInstanceId, function (err, data) {
-          if (data == false) {
+          if (data === false) {
             return;
           }
           Session.set('gameReady', true);
@@ -72,22 +72,22 @@ Template.connectFour.helpers({
 
     playerN = gameInstance.players.indexOf(Meteor.userId());
 
-    if (gameInstance.status == 'waitingForPlayers') {
+    if (gameInstance.status === 'waitingForPlayers') {
       return 'Waiting for players'
 
-    } else if (gameInstance.status == 'playing') {
-      if (gameInstance.currentTurnPlayerN == playerN) {
+    } else if (gameInstance.status === 'playing') {
+      if (gameInstance.currentTurnPlayerN === playerN) {
         return 'Your Turn!'
       } else {
         return 'Player ' + parseInt(gameInstance.currentTurnPlayerN + 1) + '\'s Turn'
       }
 
-    } else if(gameInstance.status == 'finished') {
-      if (gameInstance.winner == null) {
+    } else if(gameInstance.status === 'finished') {
+      if (gameInstance.winner === null) {
         return 'It\'s a tie!';
       }
 
-      if (gameInstance.winner == playerN) {
+      if (gameInstance.winner === playerN) {
         return 'You Won!'
       } else {
         return 'Player ' + parseInt(gameInstance.winner + 1) + ' Won!'
@@ -135,7 +135,7 @@ Template.cfColumn.helpers({
     }
     val = gameInstance.state.grid[row][col];
 
-    if (val == -1) {
+    if (val === -1) {
       return '';
     }
     return playerChars[val];

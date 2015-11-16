@@ -38,7 +38,7 @@ Template.inviteMessage.events({
     $("#addAiButton").addClass('loading');
 
     Meteor.call("addAIPlayer", currentGameInstanceId, function(err, data) {
-      if (data == false) {
+      if (data === false) {
         return;
       }
       $("#addAiButton").removeClass('loading');
