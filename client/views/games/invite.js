@@ -1,4 +1,6 @@
 showInviteMessage = function(onComplete) {
+  // Helper to show the invite message
+
   var inviteMessage = $('#inviteMessage');
   if (!inviteMessage.hasClass('hidden')) {
     return;
@@ -13,6 +15,8 @@ showInviteMessage = function(onComplete) {
 };
 
 hideInviteMessage = function(onComplete) {
+  // Helper to hide the invite message
+
   var inviteMessage = $('#inviteMessage');
   if (inviteMessage.hasClass('hidden')) {
     return;
@@ -37,6 +41,7 @@ Template.inviteMessage.events({
 
     $("#addAiButton").addClass('loading');
 
+    // Try adding an AI to the current game instance
     Meteor.call("addAIPlayer", currentGameInstanceId, function(err, data) {
       if (data === false) {
         return;
@@ -49,9 +54,13 @@ Template.inviteMessage.events({
 Template.inviteMessage.onCreated(function () {
   var currentGameInstanceId = FlowRouter.getParam("instanceId");
 
+  // Observe the game instance to hide the invite message if not needed anymore
   GameInstances.find(currentGameInstanceId).observe({
     changed: function (newDocument, oldDocument) {
-      if (!$('#inviteMessage').hasClass('hidden') && newDocument.nPlayers >= newDocument.minPlayers) {
+      if (
+        !$('#inviteMessage').hasClass('hidden')
+        && newDocument.nPlayers >= newDocument.minPlayers
+      ) {
         hideInviteMessage();
       }
     }

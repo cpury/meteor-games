@@ -1,13 +1,17 @@
 Template.gameOverview.onCreated(function () {
   var self = this;
+
+  // Subscribe to the games collection
   self.autorun(function () {
     self.subscribe("games", function () {
+      // Once the games are loaded, disable loading spinner of game overview
       $('#gameOverviewSegment').removeClass('loading');
     });
   });
 });
 
 Template.gameOverview.onRendered(function () {
+  // If the template is rendered, but data is not ready, add loading state
   if (!FlowRouter.subsReady("games")) {
     $('#gameOverviewSegment').addClass('loading');
   }
@@ -15,6 +19,7 @@ Template.gameOverview.onRendered(function () {
 
 Template.gameOverview.helpers({
   "games": function () {
+    // Return all the games
     return Games.find({});
   }
 });
@@ -26,8 +31,10 @@ Template.home.events({
     btn.addClass('loading');
     showLoadingModal();
 
+    // Try starting a Tick Tack Toe game
     Meteor.call("startGameInstance", "ttt", function (err, data) {
       if (data === false) {
+        // This is for the simulation that we want to ignore
         return;
       }
 
@@ -35,7 +42,7 @@ Template.home.events({
 
       if (err) {
         hideLoadingModal();
-        //sAlert.error('Failed to add comment...'); // TODO Add semantic alerts... Nag?
+        // TODO Add semantic alerts... Nag?
         console.log("Error while starting game:", err);
         return;
       }
@@ -50,8 +57,10 @@ Template.home.events({
     btn.addClass('loading');
     showLoadingModal();
 
+    // Try starting a Connect Four game
     Meteor.call("startGameInstance", "cf", function (err, data) {
       if (data === false) {
+        // This is for the simulation that we want to ignore
         return;
       }
 
