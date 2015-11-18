@@ -1,3 +1,4 @@
+// The characters used for each player's cell
 var playerChars = ['X', 'O'];
 
 Template.connectFour.onCreated(function () {
@@ -10,34 +11,45 @@ Template.connectFour.onCreated(function () {
       var currentGameInstanceId = FlowRouter.getParam("instanceId");
       var currentGameInstance = GameInstances.findOne(currentGameInstanceId);
 
+      // If the game instance given in the URL doesn't exist, go home
       if (!currentGameInstance) {
         FlowRouter.go('/');
       }
 
       Session.set('gameInstance', currentGameInstance);
 
+      // If the user is not part of this game instance, let her join
       if (currentGameInstance.players.indexOf(Meteor.userId()) === -1) {
         Meteor.call("joinGameInstance", currentGameInstanceId, function (err, data) {
           if (data === false) {
             return;
           }
-          Session.set('gameReady', true);
-          hideLoadingModal();
+
           if (err) {
             console.log("Error while joining game:", err);
             return;
           }
+
+          Session.set('gameReady', true);
+          hideLoadingModal();
+
           if (currentGameInstance.nPlayers + 1 < currentGameInstance.minPlayers) {
+            // If not enough players for the game, show the invite message
             showInviteMessage();
           }
         });
       } else {
+        Session.set('gameReady', true);
         hideLoadingModal();
+
         if (currentGameInstance.nPlayers < currentGameInstance.minPlayers) {
+          // If not enough players for the game, show the invite message
           showInviteMessage();
         }
       }
 
+      // Observe changes in the game instance to update the session and jiggle
+      // the status field
       GameInstances.find(currentGameInstanceId).observeChanges({
         changed: function (id, fields) {
           var currentGameInstanceId = FlowRouter.getParam("instanceId");
@@ -53,18 +65,13 @@ Template.connectFour.onCreated(function () {
   });
 });
 
-Template.connectFour.onRendered(function () {
-  if (!Session.get('gameReady')) {
-    $('#gameOverviewSegment').addClass('loading');
-  }
-});
-
 Template.connectFour.helpers({
   currentGameInstance: function () {
     return Session.get('gameInstance');
   },
 
   gameStatusString: function () {
+    // Return a string that describes the state of the game
     gameInstance = Session.get('gameInstance');
     if (!gameInstance) {
       return '';
@@ -96,6 +103,7 @@ Template.connectFour.helpers({
   },
 
   isMyTurn: function () {
+    // Return whether it's the current player's turn or not
     gameInstance = Session.get('gameInstance');
     if (!gameInstance) {
       return false;
@@ -109,6 +117,7 @@ Template.connectFour.helpers({
 
 Template.cfBoard.helpers({
   rows: function() {
+    // Return the rows of the game instance's grid
     gameInstance = Session.get('gameInstance');
     if (!gameInstance) {
       return null;
@@ -120,6 +129,7 @@ Template.cfBoard.helpers({
 
 Template.cfColumn.helpers({
   cellPlayer: function(row, col) {
+    // Return the player index (or -1) of the given cell
     gameInstance = Session.get('gameInstance');
     if (!gameInstance) {
       return '';
@@ -129,20 +139,25 @@ Template.cfColumn.helpers({
   },
 
   cell: function(row, col) {
+    // Return the player's character for the given cell
     gameInstance = Session.get('gameInstance');
     if (!gameInstance) {
       return '';
     }
+
     val = gameInstance.state.grid[row][col];
 
     if (val === -1) {
       return '';
     }
+
     return playerChars[val];
   },
 });
 
 var runAI = function() {
+  // Helper to run an AI move
+
   Meteor.call("doMove", FlowRouter.getParam("instanceId"), "ai", function (err, data) {
     if (err) {
       console.log("Error doing AI move:", err);
@@ -157,13 +172,15 @@ Template.connectFour.events({
     var row = parseInt(cell.parent().attr('id')[1]);
     var col = parseInt(cell.attr('id')[1]);
 
-    var currentGameInstanceId = FlowRouter.getParam("instanceId")
+    var currentGameInstanceId = FlowRouter.getParam("instanceId");
     var currentGameInstance = Session.get('gameInstance');
 
+    // Do nothing if no running game instance
     if (!currentGameInstance || currentGameInstance.status != 'playing') {
       return;
     }
 
+    // Do nothing if the cell is already taken
     if (currentGameInstance.state.grid[row][col] != -1) {
       return;
     }
@@ -172,6 +189,7 @@ Template.connectFour.events({
       col: col,
     };
 
+    // Try executing the move
     Meteor.call("doMove", FlowRouter.getParam("instanceId"), move, function (err, data) {
       if (err) {
         console.log("Error doing move:", err);
@@ -182,9 +200,8 @@ Template.connectFour.events({
       if (!data) {
         var currentGameInstance = Session.get('gameInstance');
         if (currentGameInstance.players.indexOf('ai') != -1) {
-          setTimeout(
-            runAI,
-            1000);
+          // Call a delayed AI move
+          setTimeout(runAI, 1000);
         }
       }
     });
