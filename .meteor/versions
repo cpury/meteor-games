@@ -29,6 +29,8 @@ check@1.1.0
 coffeescript@1.0.11
 cosmos:browserify@0.8.1
 cpury:game-base@0.0.1
+cpury:game-connectfour@0.0.1
+cpury:game-ticktacktoe@0.0.1
 dburles:mongo-collection-instances@0.3.4
 ddp@1.2.2
 ddp-client@1.2.1
