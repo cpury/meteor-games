@@ -12,8 +12,9 @@ Package.onUse(function(api) {
     'cpury:game-base'
   ]);
 
+  api.addFiles('logic.js');
+
   api.addFiles([
-    'logic.js',
     'ai.js',
   ], 'server');
 });
