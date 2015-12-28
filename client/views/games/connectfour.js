@@ -155,17 +155,6 @@ Template.cfColumn.helpers({
   },
 });
 
-var runAI = function() {
-  // Helper to run an AI move
-
-  Meteor.call("doMove", FlowRouter.getParam("instanceId"), "ai", function (err, data) {
-    if (err) {
-      console.log("Error doing AI move:", err);
-      return;
-    }
-  });
-}
-
 Template.connectFour.events({
   "click .cf.container td": function (event) {
     var cell = $(event.target);
@@ -194,15 +183,6 @@ Template.connectFour.events({
       if (err) {
         console.log("Error doing move:", err);
         return;
-      }
-
-      // Check if it's AI's turn
-      if (!data) {
-        var currentGameInstance = Session.get('gameInstance');
-        if (currentGameInstance.players.indexOf('ai') != -1) {
-          // Call a delayed AI move
-          setTimeout(runAI, 1000);
-        }
       }
     });
   },

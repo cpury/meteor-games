@@ -26,5 +26,5 @@ Package.onTest(function(api) {
   api.use('ecmascript');
   api.use('tinytest');
   api.use('cpury:game-base');
-  api.addFiles('game-base-tests.js');
+  api.addFiles('tests.js');
 });

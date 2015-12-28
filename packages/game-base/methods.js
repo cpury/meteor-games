@@ -1,5 +1,23 @@
 // Defines all methods used for basic game logic
 
+// A method to run AI moves if necessary
+var runAI = function(gameInstanceId) {
+  var gameInstance = GameInstances.findOne({_id: gameInstanceId});
+
+  if (
+    gameInstance
+    && gameInstance.status !== 'finished'
+    && gameInstance.players.indexOf('ai') != -1
+  ) {
+    Meteor.call("doMove", gameInstanceId, "ai", function (err, data) {
+      if (err) {
+        console.warn("Error doing AI move:", err);
+        return;
+      }
+    });
+  }
+};
+
 Meteor.methods({
   startGameInstance: function (gameId) {
     // Method to start a new game instance with the given game id
@@ -208,6 +226,12 @@ Meteor.methods({
       if (gameInstance.currentTurnPlayerN != playerN) {
         throw new Meteor.Error("not-your-turn");
       }
+
+      if (!this.isSimulation) {
+        Meteor.setTimeout(Meteor.bindEnvironment(function() {
+          runAI(gameInstance._id);
+        }), 1000);
+      }
     }
 
     // Set the move object's playerN property
@@ -224,12 +248,12 @@ Meteor.methods({
     var newState = gameLogic.updateState(gameInstance.state, move);
 
     // Flexible update on the game instance object
-    // Update the state, also the determine who's turn it is next
+    // Update the state, also determine who's turn it is next
     sets = {
       state: newState,
       currentTurnPlayerN: gameLogic.nextTurnPlayerN(move),
       changedAt: new Date()
-    }
+    };
 
     // Check if someone won, or if its a draw
     var win = gameLogic.checkWin(gameInstance.state, move, newState, gameInstance.moves);
