@@ -25,7 +25,7 @@ Template.tickTackToe.onCreated(function () {
       }
 
       // If the user is not part of this game instance, let her join
-      if (!gameInstance.isPlaying(Meteor.userId())) {
+      if (!gameInstance.isPlayer(Meteor.userId())) {
         Meteor.call("joinGameInstance", getGameInstanceId(), function (err, data) {
           if (data === false) {
             return;
@@ -173,7 +173,7 @@ Template.tickTackToe.events({
     var gameInstance = getGameInstance();
 
     // Do nothing if no running game instance
-    if (!gameInstance || gameInstance.status != 'playing') {
+    if (!gameInstance || !gameInstance.isPlaying()) {
       return;
     }
 

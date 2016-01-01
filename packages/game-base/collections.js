@@ -22,7 +22,7 @@ GameInstances.helpers({
   },
 
   // Returns true if the given user is playing in this instance.
-  isPlaying: function(userId) {
+  isPlayer: function(userId) {
     return this.players.indexOf(userId) !== -1;
   },
 
@@ -51,6 +51,11 @@ GameInstances.helpers({
   // Returns true if the game instance has started
   hasStarted: function() {
     return this.status !== 'waitingForPlayers';
+  },
+
+  // Returns true if the game instance is currently being played
+  isPlaying: function() {
+    return this.status === 'playing';
   },
 
   // Returns true if the game instance has finished
