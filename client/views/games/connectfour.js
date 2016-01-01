@@ -16,12 +16,13 @@ Template.connectFour.onCreated(function () {
   self.autorun(function () {
     showLoadingModal();
 
-    self.subscribe("gameInstances", function () {
+    self.subscribe("gameInstances.single", gameInstanceId, function () {
       var gameInstance = getGameInstance();
 
       // If the game instance given in the URL doesn't exist, go home
       if (!gameInstance) {
-        FlowRouter.go('/');
+        hideLoadingModal();
+        return FlowRouter.go('/');
       }
 
       // If the user is not part of this game instance, let her join

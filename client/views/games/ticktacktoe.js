@@ -7,13 +7,15 @@ Template.tickTackToe.onCreated(function () {
   self.autorun(function () {
     showLoadingModal();
 
-    self.subscribe("gameInstances", function () {
-      var currentGameInstanceId = FlowRouter.getParam("instanceId");
+    var currentGameInstanceId = FlowRouter.getParam("instanceId");
+
+    self.subscribe("gameInstances.single", currentGameInstanceId, function () {
       var currentGameInstance = GameInstances.findOne(currentGameInstanceId);
 
       // If the game instance given in the URL doesn't exist, go home
       if (!currentGameInstance) {
-        FlowRouter.go('/');
+        hideLoadingModal();
+        return FlowRouter.go('/');
       }
 
       Session.set('gameInstance', currentGameInstance);
