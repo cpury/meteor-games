@@ -8,7 +8,9 @@ Package.onUse(function(api) {
   api.versionsFrom('1.2.1');
   api.use([
     'ecmascript',
-    'mongo'
+    'underscore',
+    'mongo',
+    'dburles:collection-helpers@1.0.4'
   ]);
 
   api.addFiles([
