@@ -1,22 +1,21 @@
 // The characters used for each player's cell
 var playerChars = ['X', 'O'];
 
-var gameInstanceId = null;
-var gameReady = false;
+var getGameInstanceId = function() {
+  return FlowRouter.getParam("instanceId");
+};
 
 var getGameInstance = function() {
-  return GameInstances.findOne(gameInstanceId);
+  return GameInstances.findOne(getGameInstanceId());
 };
 
 Template.connectFour.onCreated(function () {
   var self = this;
 
-  gameInstanceId = FlowRouter.getParam("instanceId");
-
   self.autorun(function () {
     showLoadingModal();
 
-    self.subscribe("gameInstances.single", gameInstanceId, function () {
+    self.subscribe("gameInstances.single", getGameInstanceId(), function () {
       var gameInstance = getGameInstance();
 
       // If the game instance given in the URL doesn't exist, go home
@@ -27,7 +26,7 @@ Template.connectFour.onCreated(function () {
 
       // If the user is not part of this game instance, let her join
       if (!gameInstance.isPlaying(Meteor.userId())) {
-        Meteor.call("joinGameInstance", gameInstanceId, function (err, data) {
+        Meteor.call("joinGameInstance", getGameInstanceId(), function (err, data) {
           if (data === false) {
             return;
           }
@@ -37,7 +36,6 @@ Template.connectFour.onCreated(function () {
             return;
           }
 
-          gameReady = true;
           hideLoadingModal();
 
           if (getGameInstance().nPlayers + 1 < gameInstance.minPlayers) {
@@ -46,7 +44,6 @@ Template.connectFour.onCreated(function () {
           }
         });
       } else {
-        gameReady = true;
         hideLoadingModal();
 
         if (getGameInstance().nPlayers < gameInstance.minPlayers) {
@@ -57,7 +54,7 @@ Template.connectFour.onCreated(function () {
 
       // Observe changes in the game instance to update the session and jiggle
       // the status field
-      GameInstances.find(gameInstanceId).observeChanges({
+      GameInstances.find(getGameInstanceId()).observeChanges({
         changed: function (id, fields) {
           if (fields.status != null || fields.currentTurnPlayerN != null) {
             // Animate the status string
@@ -190,7 +187,7 @@ Template.connectFour.events({
     };
 
     // Try executing the move
-    Meteor.call("doMove", gameInstanceId, move, function (err, data) {
+    Meteor.call("doMove", getGameInstanceId(), move, function (err, data) {
       if (err) {
         console.log("Error doing move:", err);
         return;
