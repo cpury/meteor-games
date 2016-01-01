@@ -1,26 +1,32 @@
 // The characters used for each player's cell
 var playerChars = ['X', 'O'];
 
+var gameInstanceId = null;
+var gameReady = false;
+
+var getGameInstance = function() {
+  return GameInstances.findOne(gameInstanceId);
+};
+
 Template.connectFour.onCreated(function () {
   var self = this;
+
+  gameInstanceId = FlowRouter.getParam("instanceId");
 
   self.autorun(function () {
     showLoadingModal();
 
     self.subscribe("gameInstances", function () {
-      var currentGameInstanceId = FlowRouter.getParam("instanceId");
-      var currentGameInstance = GameInstances.findOne(currentGameInstanceId);
+      var gameInstance = getGameInstance();
 
       // If the game instance given in the URL doesn't exist, go home
-      if (!currentGameInstance) {
+      if (!gameInstance) {
         FlowRouter.go('/');
       }
 
-      Session.set('gameInstance', currentGameInstance);
-
       // If the user is not part of this game instance, let her join
-      if (currentGameInstance.players.indexOf(Meteor.userId()) === -1) {
-        Meteor.call("joinGameInstance", currentGameInstanceId, function (err, data) {
+      if (!gameInstance.isPlaying(Meteor.userId())) {
+        Meteor.call("joinGameInstance", gameInstanceId, function (err, data) {
           if (data === false) {
             return;
           }
@@ -30,19 +36,19 @@ Template.connectFour.onCreated(function () {
             return;
           }
 
-          Session.set('gameReady', true);
+          gameReady = true;
           hideLoadingModal();
 
-          if (currentGameInstance.nPlayers + 1 < currentGameInstance.minPlayers) {
+          if (getGameInstance().nPlayers + 1 < gameInstance.minPlayers) {
             // If not enough players for the game, show the invite message
             showInviteMessage();
           }
         });
       } else {
-        Session.set('gameReady', true);
+        gameReady = true;
         hideLoadingModal();
 
-        if (currentGameInstance.nPlayers < currentGameInstance.minPlayers) {
+        if (getGameInstance().nPlayers < gameInstance.minPlayers) {
           // If not enough players for the game, show the invite message
           showInviteMessage();
         }
@@ -50,14 +56,21 @@ Template.connectFour.onCreated(function () {
 
       // Observe changes in the game instance to update the session and jiggle
       // the status field
-      GameInstances.find(currentGameInstanceId).observeChanges({
+      GameInstances.find(gameInstanceId).observeChanges({
         changed: function (id, fields) {
-          var currentGameInstanceId = FlowRouter.getParam("instanceId");
-          var currentGameInstance = GameInstances.findOne(currentGameInstanceId);
-          Session.set('gameInstance', currentGameInstance);
-
           if (fields.status != null || fields.currentTurnPlayerN != null) {
-            $('#statusString').transition('jiggle');
+            // Animate the status string
+            gameInstance = getGameInstance()
+            winner = gameInstance.winner
+            playerN = gameInstance.players.indexOf(Meteor.userId());
+
+            if (winner == null) {
+              $('#statusString').transition('jiggle');
+            } else if (winner === playerN) {
+              $('#statusString').transition('bounce');
+            } else {
+              $('#statusString').transition('shake');
+            }
           }
         }
       });
@@ -67,34 +80,34 @@ Template.connectFour.onCreated(function () {
 
 Template.connectFour.helpers({
   currentGameInstance: function () {
-    return Session.get('gameInstance');
+    return getGameInstance();
   },
 
   gameStatusString: function () {
     // Return a string that describes the state of the game
-    gameInstance = Session.get('gameInstance');
+    var gameInstance = getGameInstance();
     if (!gameInstance) {
       return '';
     }
 
-    playerN = gameInstance.players.indexOf(Meteor.userId());
+    playerN = gameInstance.getPlayerNOfUser(Meteor.userId());
 
-    if (gameInstance.status === 'waitingForPlayers') {
+    if (!gameInstance.hasStarted()) {
       return 'Waiting for players'
 
-    } else if (gameInstance.status === 'playing') {
+    } else if (!gameInstance.hasFinished()) {
       if (gameInstance.currentTurnPlayerN === playerN) {
         return 'Your Turn!'
       } else {
         return 'Player ' + parseInt(gameInstance.currentTurnPlayerN + 1) + '\'s Turn'
       }
 
-    } else if(gameInstance.status === 'finished') {
-      if (gameInstance.winner === null) {
+    } else {
+      if (gameInstance.isDraw()) {
         return 'It\'s a tie!';
       }
 
-      if (gameInstance.winner === playerN) {
+      if (gameInstance.isWinner(Meteor.userId())) {
         return 'You Won!'
       } else {
         return 'Player ' + parseInt(gameInstance.winner + 1) + ' Won!'
@@ -104,21 +117,19 @@ Template.connectFour.helpers({
 
   isMyTurn: function () {
     // Return whether it's the current player's turn or not
-    gameInstance = Session.get('gameInstance');
+    var gameInstance = getGameInstance();
     if (!gameInstance) {
       return false;
     }
 
-    playerN = gameInstance.players.indexOf(Meteor.userId());
-
-    return (gameInstance.currentTurnPlayerN === playerN);
+    return gameInstance.hasTurn(Meteor.userId());
   },
 });
 
 Template.cfBoard.helpers({
   rows: function() {
     // Return the rows of the game instance's grid
-    gameInstance = Session.get('gameInstance');
+    var gameInstance = getGameInstance();
     if (!gameInstance) {
       return null;
     }
@@ -130,7 +141,7 @@ Template.cfBoard.helpers({
 Template.cfColumn.helpers({
   cellPlayer: function(row, col) {
     // Return the player index (or -1) of the given cell
-    gameInstance = Session.get('gameInstance');
+    var gameInstance = getGameInstance();
     if (!gameInstance) {
       return '';
     }
@@ -140,12 +151,12 @@ Template.cfColumn.helpers({
 
   cell: function(row, col) {
     // Return the player's character for the given cell
-    gameInstance = Session.get('gameInstance');
+    var gameInstance = getGameInstance();
     if (!gameInstance) {
       return '';
     }
 
-    val = gameInstance.state.grid[row][col];
+    var val = gameInstance.state.grid[row][col];
 
     if (val === -1) {
       return '';
@@ -161,16 +172,15 @@ Template.connectFour.events({
     var row = parseInt(cell.parent().attr('id')[1]);
     var col = parseInt(cell.attr('id')[1]);
 
-    var currentGameInstanceId = FlowRouter.getParam("instanceId");
-    var currentGameInstance = Session.get('gameInstance');
+    var gameInstance = getGameInstance();
 
     // Do nothing if no running game instance
-    if (!currentGameInstance || currentGameInstance.status != 'playing') {
+    if (!gameInstance || gameInstance.status != 'playing') {
       return;
     }
 
     // Do nothing if the cell is already taken
-    if (currentGameInstance.state.grid[row][col] != -1) {
+    if (gameInstance.state.grid[row][col] != -1) {
       return;
     }
 
@@ -179,7 +189,7 @@ Template.connectFour.events({
     };
 
     // Try executing the move
-    Meteor.call("doMove", FlowRouter.getParam("instanceId"), move, function (err, data) {
+    Meteor.call("doMove", gameInstanceId, move, function (err, data) {
       if (err) {
         console.log("Error doing move:", err);
         return;
