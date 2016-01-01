@@ -57,7 +57,17 @@ Template.tickTackToe.onCreated(function () {
           Session.set('gameInstance', currentGameInstance);
 
           if (fields.status != null || fields.currentTurnPlayerN != null) {
-            $('#statusString').transition('jiggle');
+            // Animate the status string
+            winner = currentGameInstance.winner
+            playerN = currentGameInstance.players.indexOf(Meteor.userId());
+
+            if (winner == null) {
+              $('#statusString').transition('jiggle');
+            } else if (winner === playerN) {
+              $('#statusString').transition('bounce');
+            } else {
+              $('#statusString').transition('shake');
+            }
           }
         }
       });
