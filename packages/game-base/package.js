@@ -21,7 +21,10 @@ Package.onUse(function(api) {
 
   api.addFiles(['server.js'], 'server');
 
+  api.addFiles(['client.js'], 'client');
+
   api.export(['GameInstances', 'Games', 'gameLogics', 'gameAis']);
+  api.export(['gameComponent'], 'client');
 });
 
 Package.onTest(function(api) {

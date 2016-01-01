@@ -13,10 +13,7 @@ Package.onUse(function(api) {
   ]);
 
   api.addFiles('logic.js');
-
-  api.addFiles([
-    'ai.js',
-  ], 'server');
+  api.addFiles(['ai.js'], 'server');
 });
 
 Package.onTest(function(api) {
