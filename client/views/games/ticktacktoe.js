@@ -43,8 +43,7 @@ Template.tickTackToe.onCreated(function () {
         }
       }
 
-      // Observe changes in the game instance to update the session and jiggle
-      // the status field
+      // Observe changes in the game instance to animate the status field
       GameInstances.find(component.getGameInstanceId()).observeChanges({
         changed: function (id, fields) {
           if (fields.status != null || fields.currentTurnPlayerN != null) {
