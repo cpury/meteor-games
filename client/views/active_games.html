@@ -1,0 +1,35 @@
+<template name="activeGames">
+  <div class="ui container">
+    <div class="ui fluid center aligned basic fitted game segment">
+      <h1>Your Active Games</h1>
+
+      <div class="ui hidden divider"></div>
+
+      {{> activeGamesList}}
+    </div>
+  </div>
+</template>
+
+<template name="activeGamesList">
+  <div class="ui basic segment" id="activeGamesSegment">
+    <div class="ui middle aligned selection list">
+      {{#each gameInstances}}
+        {{> activeGameEntry}}
+      {{/each}}
+    </div>
+  </div>
+</template>
+
+<template name="activeGameEntry">
+  <div class="game instance item">
+    <div class="right floated content">
+      <a href="{{ url }}" class="ui continue game button">
+        Continue
+      </a>
+    </div>
+    <div class="content">
+      <div class="header">{{ gameName }}</div>
+      <div class="description">Started {{ age }}</div>
+    </div>
+  </div>
+</template>
