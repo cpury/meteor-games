@@ -3,7 +3,7 @@ Template.gameOverview.onCreated(function () {
 
   // Subscribe to the games collection
   self.autorun(function () {
-    self.subscribe("games", function () {
+    self.subscribe("games.all", function () {
       // Once the games are loaded, disable loading spinner of game overview
       $('#gameOverviewSegment').removeClass('loading');
     });

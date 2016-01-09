@@ -7,8 +7,25 @@ Meteor.startup(function () {
 });
 
 // Publish all games
-Meteor.publish("games", function() {
+Meteor.publish("games.all", function () {
   return Games.find({});
+});
+
+// Publish all games that were played by a given user
+Meteor.publish("games.byPlayer", function (userId) {
+  gameInstances = GameInstances.find({players: userId}, {fields: {gameId: 1}});
+  gameIds = gameInstances.map(function (doc) { return doc.gameId; });
+  return Games.find({_id: {$in: gameIds}});
+});
+
+// Publish all games that are actively being played by a given user
+Meteor.publish("games.active.byPlayer", function (userId) {
+  gameInstances = GameInstances.find(
+    {players: userId, status: "playing"},
+    {fields: {gameId: 1}
+  });
+  gameIds = gameInstances.map(function (doc) { return doc.gameId; });
+  return Games.find({gameId: {$in: gameIds}});
 });
 
 // Publish all game instances
@@ -34,4 +51,9 @@ Meteor.publish("gameInstances.byAuthor", function (authorId) {
 // Publish game instances where the given user is a player
 Meteor.publish("gameInstances.byPlayer", function (userId) {
   return GameInstances.find({players: userId});
+});
+
+// Publish currently active game instances where the given user is a player
+Meteor.publish("gameInstances.active.byPlayer", function (userId) {
+  return GameInstances.find({players: userId, status: "playing"});
 });

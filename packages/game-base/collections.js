@@ -7,7 +7,7 @@ Games = new Mongo.Collection("games");
 GameInstances.helpers({
   // Returns the corresponding game instance
   getGame: function() {
-    return Games.findOne(this.gameId);
+    return Games.findOne({gameId: this.gameId});
   },
 
   // Returns the author user instance
