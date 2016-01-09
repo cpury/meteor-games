@@ -2,6 +2,7 @@
   {
     "gameId": "cf",
     "name": "Connect Four",
+    "slug": "connect-four",
     "description": "Drop coins into slots to create chains of four.",
     "nPlayers": "2",
     "nGamesStarted": 0,
@@ -10,6 +11,7 @@
   {
     "gameId": "ttt",
     "name": "Tick Tack Toe",
+    "slug": "tick-tack-toe",
     "description": "Try to get three signs in a row in this classic two-player game",
     "nPlayers": "2",
     "nGamesStarted": 0,
