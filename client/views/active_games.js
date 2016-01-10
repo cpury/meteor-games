@@ -78,20 +78,27 @@ Template.activeGamesList.events({
 Template.activeGameEntry.helpers({
   "url": function () {
     // Return the game instance's URL
-    gameInstance = this;
-    game = gameInstance.getGame();
+    var gameInstance = this;
+    var game = gameInstance.getGame();
+
+    if (!game) {
+      return '';
+    }
 
     return '/games/' + game.slug + '/' + gameInstance._id + '/';
   },
 
   "gameName": function () {
+    var game = this.getGame();
+
+    if(!game) {
+      return '';
+    }
+
     return this.getGame().name;
   },
 
   "age": function () {
-    gameInstance = this;
-    game = this.getGame();
-
     return moment(this.createdAt).fromNow();
   }
 });
