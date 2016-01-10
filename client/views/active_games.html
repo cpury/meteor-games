@@ -17,7 +17,11 @@
         {{> activeGameEntry}}
       {{/each}}
     </div>
-    <a class="ui bottom attached button" id="loadMoreGameInstances">Older games...</a>
+    {{#if moreAvailable}}
+      <a class="ui bottom attached button" id="loadMoreGameInstances">
+        Load more... ({{ moreCount }})
+      </a>
+    {{/if}}
   </div>
 </template>
 

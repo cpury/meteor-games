@@ -16,6 +16,7 @@ Template.activeGames.onCreated(function () {
   self.autorun(function () {
     var maxInstances = Session.get('activeGames.maxInstances');
 
+    self.subscribe("gameInstances.active.byPlayer.count", Meteor.userId());
     self.subscribe("games.active.byPlayer", Meteor.userId());
     self.subscribe(
       "gameInstances.active.byPlayer",
@@ -45,6 +46,21 @@ Template.activeGamesList.helpers({
       },
       { sort: {createdAt: 1} }
     );
+  },
+
+  "moreCount": function () {
+    // Return the number of additional instances available on the server
+    var displayed = Session.get('activeGames.maxInstances');
+    var total = Counts.get('gameInstances.active.byPlayer.count');
+    return total - displayed;
+  },
+
+  "moreAvailable": function () {
+    // Whether more game instances are available in the backend to be fetched
+    var displayed = Session.get('activeGames.maxInstances');
+    var total = Counts.get('gameInstances.active.byPlayer.count');
+
+    return displayed < total;
   }
 });
 
