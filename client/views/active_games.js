@@ -1,21 +1,30 @@
+var DEFAULT_PAGE = 5;
+
 Template.activeGames.onCreated(function () {
   var self = this;
 
+  Session.set('activeGames.maxInstances', DEFAULT_PAGE);
+
   // Once the data is ready, remove loading state
-  self.autorun(function (c) {
-    if(!FlowRouter.subsReady()) {
-      $('#activeGamesSegment').addClass('loading');
-      c.stop();
+  self.autorun(function () {
+    if(FlowRouter.subsReady()) {
+      $('#activeGamesSegment').removeClass('loading');
     }
   });
 
   // Subscribe to the game instances and games collections
   self.autorun(function () {
+    var maxInstances = Session.get('activeGames.maxInstances');
+
     self.subscribe("games.active.byPlayer", Meteor.userId());
     self.subscribe(
       "gameInstances.active.byPlayer",
       Meteor.userId(),
-      { limit: 5, sort: {createdAt: 1} });
+      { limit: maxInstances, sort: {createdAt: 1} },
+      function () {
+        $('#loadMoreGameInstances').removeClass('loading');
+      }
+    );
   });
 });
 
@@ -36,6 +45,16 @@ Template.activeGamesList.helpers({
       },
       { sort: {createdAt: 1} }
     );
+  }
+});
+
+Template.activeGamesList.events({
+  "click #loadMoreGameInstances": function (event) {
+    var btn = $(event.target);
+    btn.addClass('loading');
+
+    var n = Session.get('activeGames.maxInstances');
+    Session.set('activeGames.maxInstances', n + DEFAULT_PAGE)
   }
 });
 

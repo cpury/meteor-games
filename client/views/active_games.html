@@ -12,11 +12,12 @@
 
 <template name="activeGamesList">
   <div class="ui basic segment" id="activeGamesSegment">
-    <div class="ui middle aligned selection list">
+    <div class="ui selection list">
       {{#each gameInstances}}
         {{> activeGameEntry}}
       {{/each}}
     </div>
+    <a class="ui bottom attached button" id="loadMoreGameInstances">Older games...</a>
   </div>
 </template>
 
