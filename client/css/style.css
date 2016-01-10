@@ -59,9 +59,19 @@ body {
   height: 45px;
 }
 
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
 @media (max-width: 767px) {
   .game.segment {
     padding: 0;
+  }
+
+  .desktop-only {
+    display: none !important;
   }
 }
 

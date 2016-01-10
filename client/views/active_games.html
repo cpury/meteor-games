@@ -12,13 +12,13 @@
 
 <template name="activeGamesList">
   <div class="ui basic segment" id="activeGamesSegment">
-    <div class="ui selection list">
+    <div class="ui large relaxed divided selection list">
       {{#each gameInstances}}
         {{> activeGameEntry}}
       {{/each}}
     </div>
     {{#if moreAvailable}}
-      <a class="ui bottom attached button" id="loadMoreGameInstances">
+      <a class="ui bottom attached secondary button" id="loadMoreGameInstances">
         Load more... ({{ moreCount }})
       </a>
     {{/if}}
@@ -26,15 +26,11 @@
 </template>
 
 <template name="activeGameEntry">
-  <div class="game instance item">
-    <div class="right floated content">
-      <a href="{{ url }}" class="ui continue game button">
-        Continue
-      </a>
-    </div>
+  <a class="game instance item" href="{{ url }}">
+    <i class="large middle aligned blue circle icon"></i>
     <div class="content">
       <div class="header">{{ gameName }}</div>
       <div class="description">Started {{ age }}</div>
     </div>
-  </div>
+  </a>
 </template>
