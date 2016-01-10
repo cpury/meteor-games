@@ -57,3 +57,12 @@ Meteor.publish("gameInstances.byPlayer", function (userId, options) {
 Meteor.publish("gameInstances.active.byPlayer", function (userId, options) {
   return GameInstances.find({players: userId, status: "playing"}, options);
 });
+
+// Counts
+
+Meteor.publish('gameInstances.active.byPlayer.count', function (userId) {
+  Counts.publish(
+    this,
+    'gameInstances.active.byPlayer.count',
+    GameInstances.find({players: userId, status: "playing"}));
+});
