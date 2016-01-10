@@ -19,7 +19,7 @@ Package.onUse(function(api) {
     'methods.js'
   ]);
 
-  api.addFiles(['server.js'], 'server');
+  api.addFiles(['server.js', 'publications.js'], 'server');
 
   api.addFiles(['client.js'], 'client');
 
