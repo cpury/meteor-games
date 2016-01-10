@@ -24,17 +24,18 @@ Template.gameOverview.helpers({
   }
 });
 
-Template.home.events({
-  "click #tttCard .new.game.button": function (event) {
+Template.gameCard.events({
+  "click .new.game.button": function (event) {
     var btn = $(event.target);
+    var slug = this.slug;
 
     btn.addClass('loading');
     showLoadingModal();
 
-    // Try starting a Tick Tack Toe game
-    Meteor.call("startGameInstance", "ttt", function (err, data) {
+    // Try starting a new game instance
+    Meteor.call("startGameInstance", this.gameId, function (err, data) {
       if (data === false) {
-        // This is for the simulation that we want to ignore
+        // Simulation, so ignore
         return;
       }
 
@@ -42,38 +43,12 @@ Template.home.events({
 
       if (err) {
         hideLoadingModal();
-        // TODO Add semantic alerts... Nag?
+        // TODO: Add error message
         console.log("Error while starting game:", err);
         return;
       }
 
-      FlowRouter.go('/games/tick-tack-toe/' + data + '/');
-    });
-  },
-
-  "click #cfCard .new.game.button": function (event) {
-    var btn = $(event.target);
-
-    btn.addClass('loading');
-    showLoadingModal();
-
-    // Try starting a Connect Four game
-    Meteor.call("startGameInstance", "cf", function (err, data) {
-      if (data === false) {
-        // This is for the simulation that we want to ignore
-        return;
-      }
-
-      btn.removeClass('loading');
-
-      if (err) {
-        hideLoadingModal();
-        //sAlert.error('Failed to add comment...'); // TODO Add semantic alerts... Nag?
-        console.log("Error while starting game:", err);
-        return;
-      }
-
-      FlowRouter.go('/games/connect-four/' + data + '/');
+      FlowRouter.go('/games/' + slug + '/' + data + '/');
     });
   }
 });
