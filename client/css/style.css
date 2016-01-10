@@ -82,3 +82,12 @@ body {
 .playerCell1 {
   background-color: #DB2828 !important;
 }
+
+.game.instance.item .content {
+  width: 100%;
+  text-align: left;
+}
+
+.game.instance.item:nth-child(even) {
+  background-color: aliceblue;
+}
