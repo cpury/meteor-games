@@ -8,3 +8,18 @@
   {{> loadingModal}}
   {{> sAlert}}
 </template>
+
+<template name="pageNotFound">
+  <div class="ui container">
+    <div class="ui fluid center aligned basic fitted segment">
+      <h1>Not Found :(</h1>
+
+      <p>
+        The page you are looking for doesn't seem to exist.
+      </p>
+      <p>
+        <a href="{{pathFor 'home'}}">Click here to go back to Meteor Games.</a>
+      </p>
+    </div>
+  </div>
+</template>
