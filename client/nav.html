@@ -6,6 +6,11 @@
     </a>
     <a class="{{isActiveRoute regex='activeGames'}} item" href="{{pathFor 'activeGames'}}">
       My Active Games
+      {{#if instanceCount}}
+        <div class="ui small red label">
+          {{instanceCount}}
+        </div>
+      {{/if}}
     </a>
     <div class="right menu">
       {{> atNavButton}}
