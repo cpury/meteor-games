@@ -30,7 +30,7 @@ Template.gameCard.events({
     var slug = this.slug;
 
     btn.addClass('loading');
-    showLoadingModal();
+    Session.set("loadingState", true);
 
     // Try starting a new game instance
     Meteor.call("startGameInstance", this.gameId, function (err, data) {
@@ -42,7 +42,7 @@ Template.gameCard.events({
       btn.removeClass('loading');
 
       if (err) {
-        hideLoadingModal();
+        Session.set("loadingState", false);
         // TODO: Add error message
         console.log("Error while starting game:", err);
         return;

@@ -4,14 +4,14 @@ Template.tickTackToe.onCreated(function () {
   var self = this;
 
   self.autorun(function () {
-    showLoadingModal();
+    Session.set("loadingState", true);
 
     self.subscribe("gameInstances.single", component.getGameInstanceId(), function () {
       var gameInstance = component.getGameInstance();
 
       // If the game instance given in the URL doesn't exist, go home
       if (!gameInstance) {
-        hideLoadingModal();
+        Session.set("loadingState", false);
         return FlowRouter.go('/');
       }
 
@@ -27,7 +27,7 @@ Template.tickTackToe.onCreated(function () {
             return;
           }
 
-          hideLoadingModal();
+          Session.set("loadingState", false);
 
           if (component.getGameInstance().nPlayers + 1 < gameInstance.minPlayers) {
             // If not enough players for the game, show the invite message
@@ -35,7 +35,7 @@ Template.tickTackToe.onCreated(function () {
           }
         });
       } else {
-        hideLoadingModal();
+        Session.set("loadingState", false);
 
         if (component.getGameInstance().nPlayers < gameInstance.minPlayers) {
           // If not enough players for the game, show the invite message
