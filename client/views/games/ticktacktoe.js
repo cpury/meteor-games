@@ -23,7 +23,7 @@ Template.tickTackToe.onCreated(function () {
           }
 
           if (err) {
-            console.log("Error while joining game:", err);
+            sAlert.error("Error while joining game: " + err);
             return;
           }
 
@@ -146,7 +146,7 @@ Template.tickTackToe.events({
     // Try executing the move
     Meteor.call("doMove", component.getGameInstanceId(), move, function (err, data) {
       if (err) {
-        console.log("Error doing move:", err);
+        sAlert.error("Error doing move: " + err);
         return;
       }
     });

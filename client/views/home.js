@@ -43,8 +43,7 @@ Template.gameCard.events({
 
       if (err) {
         Session.set("loadingState", false);
-        // TODO: Add error message
-        console.log("Error while starting game:", err);
+        sAlert.error("Could not create game: " + err);
         return;
       }
 
