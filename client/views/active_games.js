@@ -76,9 +76,8 @@ Template.activeGamesList.events({
 });
 
 Template.activeGameEntry.helpers({
-  "url": function () {
+  "url": function (gameInstance) {
     // Return the game instance's URL
-    var gameInstance = this;
     var game = gameInstance.getGame();
 
     if (!game) {
@@ -88,17 +87,17 @@ Template.activeGameEntry.helpers({
     return '/games/' + game.slug + '/' + gameInstance._id + '/';
   },
 
-  "gameName": function () {
-    var game = this.getGame();
+  "gameName": function (gameInstance) {
+    var game = gameInstance.getGame();
 
     if(!game) {
       return '';
     }
 
-    return this.getGame().name;
+    return game.name;
   },
 
-  "age": function () {
-    return moment(this.createdAt).fromNow();
+  "age": function (gameInstance) {
+    return moment(gameInstance.createdAt).fromNow();
   }
 });

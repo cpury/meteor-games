@@ -13,8 +13,8 @@
 <template name="activeGamesList">
   <div class="ui basic segment" id="activeGamesSegment">
     <div class="ui large relaxed divided selection list">
-      {{#each gameInstances}}
-        {{> activeGameEntry}}
+      {{#each gameInstance in gameInstances}}
+        {{> activeGameEntry gameInstance=gameInstance}}
       {{else}}
         Nothing here...
       {{/each}}
@@ -28,11 +28,11 @@
 </template>
 
 <template name="activeGameEntry">
-  <a class="game instance item" href="{{ url }}">
+  <a class="game instance item" href="{{ url gameInstance }}">
     <i class="large middle aligned blue circle icon"></i>
     <div class="content">
-      <div class="header">{{ gameName }}</div>
-      <div class="description">Started {{ age }}</div>
+      <div class="header">{{ gameName gameInstance }}</div>
+      <div class="description">Started {{ age gameInstance }}</div>
     </div>
   </a>
 </template>

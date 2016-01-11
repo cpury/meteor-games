@@ -27,13 +27,13 @@ Template.gameOverview.helpers({
 Template.gameCard.events({
   "click .new.game.button": function (event) {
     var btn = $(event.target);
-    var slug = this.slug;
+    var slug = this.game.slug;
 
     btn.addClass('loading');
     Session.set("loadingState", true);
 
     // Try starting a new game instance
-    Meteor.call("startGameInstance", this.gameId, function (err, data) {
+    Meteor.call("startGameInstance", this.game.gameId, function (err, data) {
       if (data === false) {
         // Simulation, so ignore
         return;

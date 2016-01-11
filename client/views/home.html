@@ -16,30 +16,30 @@
 <template name="gameOverview">
   <div class="ui basic segment" id="gameOverviewSegment">
     <div class="ui centered three stackable doubling game cards">
-      {{#each games}}
-        {{> gameCard}}
+      {{#each game in games}}
+        {{> gameCard game=game}}
       {{/each}}
     </div>
   </div>
 </template>
 
 <template name="gameCard">
-  <div class="ui game card" id="{{ gameId }}Card">
+  <div class="ui game card" id="{{ game.gameId }}Card">
     <div class="content">
       <div class="ui large header" style="margin-bottom: -6px">
         <i class="game icon"></i>
-        {{ name }}
+        {{ game.name }}
       </div>
     </div>
     <div class="content">
-      {{ description }}
+      {{ game.description }}
     </div>
     <div class="extra content">
       <span class="right floated">
-        <i class="repeat icon"></i>{{ nGamesStarted }} Games played
+        <i class="repeat icon"></i>{{ game.nGamesStarted }} Games played
       </span>
       <span class="left floated">
-        <i class="user icon"></i>{{ nPlayers }} Players
+        <i class="user icon"></i>{{ game.nPlayers }} Players
       </span>
     </div>
     <div class="ui bottom attached blue right labeled icon new game button">
