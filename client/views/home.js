@@ -13,7 +13,7 @@ Template.gameOverview.onCreated(function () {
 Template.gameOverview.onRendered(function () {
   // If the template is rendered, but data is not ready, add loading state
   if (!FlowRouter.subsReady("games")) {
-    $('#gameOverviewSegment').addClass('loading');
+    Template.instance().$('#gameOverviewSegment').addClass('loading');
   }
 });
 
@@ -25,8 +25,8 @@ Template.gameOverview.helpers({
 });
 
 Template.gameCard.events({
-  "click .new.game.button": function (event) {
-    var btn = $(event.target);
+  "click .new.game.button": function (event, instance) {
+    var btn = instance.$(event.target);
     var slug = this.game.slug;
 
     btn.addClass('loading');

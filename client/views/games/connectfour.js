@@ -121,8 +121,8 @@ Template.cfColumn.helpers({
 });
 
 Template.connectFour.events({
-  "click .cf.container td": function (event) {
-    var cell = $(event.target);
+  "click .cf.container td": function (event, instance) {
+    var cell = instance.$(event.target);
     var row = parseInt(cell.parent().attr('id')[1]);
     var col = parseInt(cell.attr('id')[1]);
 

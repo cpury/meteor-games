@@ -32,7 +32,7 @@ Template.activeGames.onCreated(function () {
 Template.activeGames.onRendered(function () {
   // If the template is rendered, but data is not ready, add loading state
   if (!FlowRouter.subsReady()) {
-    $('#activeGamesSegment').addClass('loading');
+    Template.instance().$('#activeGamesSegment').addClass('loading');
   }
 });
 
@@ -66,8 +66,8 @@ Template.activeGamesList.helpers({
 });
 
 Template.activeGamesList.events({
-  "click #loadMoreGameInstances": function (event) {
-    var btn = $(event.target);
+  "click #loadMoreGameInstances": function (event, instance) {
+    var btn = instance.$(event.target);
     btn.addClass('loading');
 
     var n = Session.get('activeGames.maxInstances');
